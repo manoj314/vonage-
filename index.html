@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Hello, world!</title>
+  </head>
+  <body>
+  
+  
+<div class="container-fluid">
+   <div class="row">
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm">
+        <center>
+          <br><br>Welcome to vRide!<br><br>
+          <input type="text" placeholder="Enter your Number" id="number" />
+          <button onclick="sendOtp();" class="btn-primary" >Send Otp</button>
+          <br><br>
+          <input style="display: none;" type="text" placeholder="Enter your otp" id="otp" /><br>
+          <button style="display: none;" id="otpb" onclick="checkOtp();" class="btn-primary" >Verify Otp</button>
+
+      </center> 
+    </div>
+    <div class="col-sm">
+
+    </div>
+   
+  </div>
+</div>
+
+<script>
+
+var id='';
+
+function sendOtp(){
+
+  var number = document.getElementById(`number`).value;
+  jQuery.ajax({
+    url: `http://localhost:8091/sendotp?number=${number}`,
+    method: "GET",
+    success: function (res) {
+    console.log(res.number);
+    id = res.number;
+    document.getElementById(`otp`).style.display="block";
+    document.getElementById(`otpb`).style.display="block";
+    },
+    error: function (error) {
+      alert(`failed`);
+    }
+  });
+
+
+
+}
+
+function checkOtp(){
+
+var otp = document.getElementById(`otp`).value;
+
+
+var number = document.getElementById(`number`).value;
+  jQuery.ajax({
+    url: `http://localhost:8091/checkotp?otp=${otp}&id=${id}`,
+    method: "GET",
+    success: function (res) {
+    console.log(res);
+    if(res.status==0){
+      alert(`success`);
+    }
+    else{
+      alert(res.error_text);
+    }
+
+    },
+    error: function (error) {
+      alert(`failed`);
+    }
+  });
+
+}
+
+
+
+
+</script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
